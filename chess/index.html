@@ -13,6 +13,14 @@
 		<div id="board" class="board" role="grid" aria-label="Chessboard"></div>
 		<div class="controls">
 			<button id="newGame" type="button">New Game</button>
+			<label>
+				<span>Computer:</span>
+				<select id="computerSide" aria-label="Computer side">
+					<option value="off">Off</option>
+					<option value="b">Plays Black</option>
+					<option value="w">Plays White</option>
+				</select>
+			</label>
 			<label class="flip">
 				<input id="flipBoard" type="checkbox" />
 				<span>Flip board</span>

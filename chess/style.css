@@ -116,6 +116,14 @@ h1 {
 	margin-bottom: 4px;
 }
 
+select {
+	background: #0b1227;
+	color: var(--color-text);
+	border: 1px solid #23375f;
+	border-radius: 6px;
+	padding: 6px 8px;
+}
+
 button {
 	background: #2563eb;
 	border: none;
