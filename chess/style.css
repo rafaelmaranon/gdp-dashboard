@@ -61,6 +61,22 @@ h1 {
 	cursor: default;
 }
 
+/* Team color marker dot in the corner */
+.square[data-color="w"]::before,
+.square[data-color="b"]::before {
+	content: "";
+	position: absolute;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	border: 2px solid rgba(0,0,0,0.3);
+	top: 6px;
+	right: 6px;
+}
+
+.square[data-color="w"]::before { background: #ffffff; }
+.square[data-color="b"]::before { background: #111827; }
+
 .square.light { background: var(--color-light); }
 .square.dark { background: var(--color-dark); }
 

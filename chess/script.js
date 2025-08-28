@@ -1,9 +1,9 @@
 "use strict";
 
-// Unicode symbols for pieces by color
+// Baseball-themed icons per piece type (same icons for both colors)
 const UNICODE_PIECE = {
-	w: { k: "\u2654", q: "\u2655", r: "\u2656", b: "\u2657", n: "\u2658", p: "\u2659" },
-	b: { k: "\u265A", q: "\u265B", r: "\u265C", b: "\u265D", n: "\u265E", p: "\u265F" },
+	w: { k: "🧢", q: "🏆", r: "🧤", b: "⚾", n: "📣", p: "🥎" },
+	b: { k: "🧢", q: "🏆", r: "🧤", b: "⚾", n: "📣", p: "🥎" },
 };
 
 /**
@@ -173,6 +173,11 @@ function renderAll() {
 			const piece = state.board[mr][mc];
 
 			sqEl.textContent = piece ? UNICODE_PIECE[piece.color][piece.type] : "";
+			if (piece) {
+				sqEl.setAttribute("data-color", piece.color);
+			} else {
+				sqEl.removeAttribute("data-color");
+			}
 			sqEl.classList.toggle("selectable", !!piece && piece.color === state.currentPlayer && !state.gameOver);
 
 			sqEl.classList.remove("highlight-move", "highlight-capture", "king-in-check");
