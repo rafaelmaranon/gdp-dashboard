@@ -15,6 +15,9 @@ const state = {
 	message: "Top 1st — CPU batting",
 	whoAtBat: "away", // 'away' (CPU) or 'home' (Human)
 	locked: false,
+	announcer: false,
+	giants: false,
+	lastLoggedMessage: null,
 };
 
 const el = {
@@ -33,6 +36,11 @@ const el = {
 	btnTake: document.getElementById("btnTake"),
 	btnNew: document.getElementById("btnNew"),
 	ball: document.getElementById("ball"),
+	pbp: document.getElementById("playByPlay"),
+	announcerToggle: document.getElementById("announcerToggle"),
+	giantsMode: document.getElementById("giantsMode"),
+	teamAwayName: document.getElementById("teamAwayName"),
+	teamHomeName: document.getElementById("teamHomeName"),
 };
 
 function render() {
@@ -53,6 +61,24 @@ function render() {
 	el.btnSwing.disabled = !humanTurn;
 	el.btnTake.disabled = !humanTurn;
 	el.btnNew.disabled = false;
+
+	// Team labels for Giants mode
+	if (el.teamHomeName && el.teamAwayName) {
+		if (state.giants) {
+			el.teamHomeName.textContent = "Giants";
+			el.teamAwayName.textContent = "Visitors";
+		} else {
+			el.teamHomeName.textContent = "Home";
+			el.teamAwayName.textContent = "Away";
+		}
+	}
+
+	// Log and optionally speak when message changes
+	if (state.message !== state.lastLoggedMessage) {
+		appendPbp(state.message);
+		if (state.announcer) speak(state.message);
+		state.lastLoggedMessage = state.message;
+	}
 }
 
 function resetGame() {
@@ -252,9 +278,30 @@ function checkGameOverIfNeeded() {
 			if (state.scoreHome !== state.scoreAway) {
 				state.gameOver = true;
 				state.message = state.scoreHome > state.scoreAway ? "Final — You win" : "Final — CPU wins";
+				if (state.announcer) speak(state.message);
 			}
 		}
 	}
+}
+
+// --- Announcer helpers ---
+function appendPbp(line) {
+	const log = document.getElementById("playByPlay");
+	if (!log) return;
+	const div = document.createElement("div");
+	div.textContent = line;
+	log.prepend(div);
+}
+
+function speak(text) {
+	try {
+		if (!("speechSynthesis" in window)) return;
+		const utter = new SpeechSynthesisUtterance(text);
+		utter.rate = 1.05;
+		utter.pitch = 1.0;
+		speechSynthesis.cancel();
+		speechSynthesis.speak(utter);
+	} catch {}
 }
 
 // Event wiring
@@ -273,6 +320,26 @@ el.btnTake.addEventListener("click", () => {
 el.btnNew.addEventListener("click", () => {
 	resetGame();
 });
+
+if (document.getElementById("announcerToggle")) {
+	document.getElementById("announcerToggle").addEventListener("change", (e) => {
+		state.announcer = !!e.target.checked;
+		if (state.announcer) speak(state.message);
+	});
+}
+
+if (document.getElementById("giantsMode")) {
+	document.getElementById("giantsMode").addEventListener("change", (e) => {
+		state.giants = !!e.target.checked;
+		const app = document.getElementById("app");
+		if (state.giants) {
+			if (app) app.style.setProperty("--accent", "#f97316");
+		} else {
+			if (app) app.style.removeProperty("--accent");
+		}
+		render();
+	});
+}
 
 // Kick off
 render();

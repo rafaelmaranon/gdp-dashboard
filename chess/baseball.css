@@ -100,7 +100,10 @@ button { background: #2563eb; border: none; color: white; padding: 8px 12px; bor
 button:hover { background: #1d4ed8; }
 button:disabled { opacity: 0.5; cursor: default; }
 
+.options { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
+.toggle { display: inline-flex; gap: 6px; align-items: center; }
 .legend { opacity: 0.85; font-size: 13px; margin-top: 8px; }
+.pbp { margin-top: 10px; max-height: 150px; overflow: auto; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; font-size: 14px; line-height: 1.35; }
 
 @media (max-width: 640px) {
 	.diamond { width: 210px; height: 210px; }

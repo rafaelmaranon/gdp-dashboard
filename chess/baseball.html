@@ -7,12 +7,12 @@
 	<link rel="stylesheet" href="baseball.css" />
 </head>
 <body>
-	<div class="app">
+	<div class="app" id="app">
 		<h1>Quick Baseball</h1>
 		<div id="status" class="status" aria-live="polite"></div>
 		<div class="scoreboard">
 			<div class="team">
-				<span class="label">Away</span>
+				<span class="label" id="teamAwayName">Away</span>
 				<span id="scoreAway" class="score">0</span>
 			</div>
 			<div class="inning">
@@ -21,7 +21,7 @@
 				<span id="half" class="half">Top</span>
 			</div>
 			<div class="team">
-				<span class="label">Home</span>
+				<span class="label" id="teamHomeName">Home</span>
 				<span id="scoreHome" class="score">0</span>
 			</div>
 		</div>
@@ -44,7 +44,12 @@
 			<button id="btnTake" type="button">Take</button>
 			<button id="btnNew" type="button">New Game</button>
 		</div>
-		<div class="legend">You bat as Home (bottom). One inning; extra innings if tied.</div>
+		<div class="options">
+			<label class="toggle"><input id="announcerToggle" type="checkbox" /> <span>Announcer</span></label>
+			<label class="toggle"><input id="giantsMode" type="checkbox" /> <span>Giants theme</span></label>
+		</div>
+		<div class="legend">You bat as Home (bottom). One inning; extra innings if tied. Turn on the Announcer for play-by-play.</div>
+		<div class="pbp" id="playByPlay" aria-live="polite" aria-label="Play by play"></div>
 	</div>
 	<script src="baseball.js"></script>
 </body>
