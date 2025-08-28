@@ -1,9 +1,9 @@
 "use strict";
 
-// Baseball-themed icons per piece type (same icons for both colors)
+// Theme: White = houses/buildings, Black = cinema/actors
 const UNICODE_PIECE = {
-	w: { k: "🧢", q: "🏆", r: "🧤", b: "⚾", n: "📣", p: "🥎" },
-	b: { k: "🧢", q: "🏆", r: "🧤", b: "⚾", n: "📣", p: "🥎" },
+	w: { k: "🏰", q: "🏠", r: "🏢", b: "🏡", n: "🏘️", p: "🧱" },
+	b: { k: "🎬", q: "🎭", r: "🎥", b: "⭐", n: "🕶️", p: "🍿" },
 };
 
 /**
