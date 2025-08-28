@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Ping Pong</title>
+	<link rel="stylesheet" href="pingpong.css" />
+</head>
+<body>
+	<div class="app">
+		<h1>Ping Pong</h1>
+		<div class="scoreboard">
+			<div class="team">
+				<span>Player</span>
+				<span id="scorePlayer" class="score">0</span>
+			</div>
+			<div class="center">
+				<span id="status" class="status"></span>
+			</div>
+			<div class="team">
+				<span>CPU</span>
+				<span id="scoreCpu" class="score">0</span>
+			</div>
+		</div>
+		<div class="stage">
+			<canvas id="game" width="800" height="500" aria-label="Ping Pong table"></canvas>
+		</div>
+		<div class="controls">
+			<button id="btnStart" type="button">Start</button>
+			<button id="btnPause" type="button">Pause</button>
+			<button id="btnReset" type="button">Reset</button>
+			<label class="sel">
+				<span>Difficulty</span>
+				<select id="difficulty">
+					<option value="easy">Easy</option>
+					<option value="normal" selected>Normal</option>
+					<option value="hard">Hard</option>
+				</select>
+			</label>
+		</div>
+		<div class="legend">Controls: W/S or ↑/↓. On mobile, drag or slide vertically on the left side.</div>
+	</div>
+	<script src="pingpong.js"></script>
+</body>
+</html>
+
