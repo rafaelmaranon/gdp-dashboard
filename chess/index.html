@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Simple Chess</title>
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+	<div class="app">
+		<h1>Chess</h1>
+		<div id="status" class="status" aria-live="polite"></div>
+		<div id="board" class="board" role="grid" aria-label="Chessboard"></div>
+		<div class="controls">
+			<button id="newGame" type="button">New Game</button>
+			<label class="flip">
+				<input id="flipBoard" type="checkbox" />
+				<span>Flip board</span>
+			</label>
+		</div>
+		<div class="legend">
+			<span>Click a piece to see legal moves. Promotion auto-queens. No castling or en passant.</span>
+		</div>
+	</div>
+	<script src="script.js"></script>
+</body>
+</html>
+
