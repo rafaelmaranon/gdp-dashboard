@@ -62,6 +62,18 @@ h1 { margin: 0 0 12px; }
 	transform: rotate(45deg);
 }
 
+.ball {
+	position: absolute;
+	width: 18px; height: 18px; border-radius: 50%;
+	background: radial-gradient(circle at 35% 35%, #ffffff, #f1f5f9);
+	box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+	left: calc(50% - 9px);
+	top: calc(100% - 48px);
+	transform: rotate(-45deg);
+	opacity: 0.95;
+	transition: left 0.45s ease, top 0.45s ease, opacity 0.3s ease;
+}
+
 .base, .home { position: absolute; display: grid; place-items: center; }
 .base { width: 40px; height: 40px; background: #fff; border: 3px solid #111827; }
 .base::before { content: ""; position: absolute; inset: 0; transform: rotate(45deg); border-radius: 4px; background: #fff; border: 3px solid #111827; }

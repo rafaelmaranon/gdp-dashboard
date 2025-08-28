@@ -32,6 +32,7 @@ const el = {
 	btnSwing: document.getElementById("btnSwing"),
 	btnTake: document.getElementById("btnTake"),
 	btnNew: document.getElementById("btnNew"),
+	ball: document.getElementById("ball"),
 };
 
 function render() {
@@ -102,6 +103,7 @@ function labelInning() {
 function pitchOutcome(isSwing) {
 	// Simple RNG: pitch roughly 60% strike, 40% ball.
 	const isStrike = Math.random() < 0.6;
+	animatePitch(isStrike);
 	if (!isSwing) {
 		if (isStrike) {
 			addStrike();
@@ -141,6 +143,21 @@ function pitchOutcome(isSwing) {
 	// Out in play
 	addOut();
 	state.message = labelInning() + " — Out";
+}
+
+function animatePitch(isStrike) {
+	if (!el.ball) return;
+	// Reset to mound release point
+	el.ball.style.opacity = "0.95";
+	el.ball.style.left = "calc(50% - 9px)";
+	el.ball.style.top = "calc(100% - 48px)";
+	// Next tick move to plate with minor random offset depending on strike or ball
+	requestAnimationFrame(() => {
+		const offset = isStrike ? 0 : (Math.random() * 40 - 20);
+		el.ball.style.left = `calc(50% - 9px + ${offset}px)`;
+		el.ball.style.top = "calc(0% + 12px)";
+		setTimeout(() => { el.ball.style.opacity = "0"; }, 450);
+	});
 }
 
 function addBall() {
