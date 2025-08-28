@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Quick Baseball</title>
+	<link rel="stylesheet" href="baseball.css" />
+</head>
+<body>
+	<div class="app">
+		<h1>Quick Baseball</h1>
+		<div id="status" class="status" aria-live="polite"></div>
+		<div class="scoreboard">
+			<div class="team">
+				<span class="label">Away</span>
+				<span id="scoreAway" class="score">0</span>
+			</div>
+			<div class="inning">
+				<span>Inning</span>
+				<span id="inning">1</span>
+				<span id="half" class="half">Top</span>
+			</div>
+			<div class="team">
+				<span class="label">Home</span>
+				<span id="scoreHome" class="score">0</span>
+			</div>
+		</div>
+		<div class="field">
+			<div class="diamond">
+				<div id="base2" class="base">2</div>
+				<div id="base1" class="base">1</div>
+				<div id="base3" class="base">3</div>
+				<div class="home">H</div>
+			</div>
+			<div class="counts">
+				<div>Balls: <span id="balls">0</span></div>
+				<div>Strikes: <span id="strikes">0</span></div>
+				<div>Outs: <span id="outs">0</span></div>
+			</div>
+		</div>
+		<div class="controls">
+			<button id="btnSwing" type="button">Swing</button>
+			<button id="btnTake" type="button">Take</button>
+			<button id="btnNew" type="button">New Game</button>
+		</div>
+		<div class="legend">You bat as Home (bottom). One inning; extra innings if tied.</div>
+	</div>
+	<script src="baseball.js"></script>
+</body>
+</html>
+
