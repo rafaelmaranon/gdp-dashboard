@@ -20,12 +20,15 @@ const state = {
 	gameOver: false,
 	winner: null, // 'w' | 'b' | 'draw'
 	flip: false,
+	computerSide: "off", // 'off' | 'w' | 'b'
+	aiThinking: false,
 };
 
 const boardEl = document.getElementById("board");
 const statusEl = document.getElementById("status");
 const newGameBtn = document.getElementById("newGame");
 const flipBoardCheckbox = document.getElementById("flipBoard");
+const computerSideSelect = document.getElementById("computerSide");
 
 // Initialize UI
 buildBoardSquares();
@@ -40,6 +43,13 @@ flipBoardCheckbox.addEventListener("change", (e) => {
 	renderAll();
 });
 
+computerSideSelect.addEventListener("change", (e) => {
+	const val = e.target.value;
+	state.computerSide = val === "off" ? "off" : (val === "w" ? "w" : "b");
+	renderAll();
+	queueAiIfNeeded();
+});
+
 function resetGame() {
 	state.board = createStartingBoard();
 	state.currentPlayer = "w";
@@ -48,6 +58,7 @@ function resetGame() {
 	state.gameOver = false;
 	state.winner = null;
 	renderAll();
+	queueAiIfNeeded();
 }
 
 function createStartingBoard() {
@@ -95,6 +106,7 @@ function buildBoardSquares() {
 
 function onSquareClick(e) {
 	if (state.gameOver) return;
+	if (isAiTurn() || state.aiThinking) return;
 	const target = e.currentTarget;
 	const row = Number(target.dataset.row);
 	const col = Number(target.dataset.col);
@@ -148,6 +160,8 @@ function afterMoveUpdate() {
 			state.winner = "draw";
 		}
 	}
+
+	queueAiIfNeeded();
 }
 
 function renderAll() {
@@ -160,7 +174,8 @@ function renderAll() {
 		}
 	} else {
 		const checkNote = isKingInCheck(state.currentPlayer, state.board) ? " (check)" : "";
-		statusEl.textContent = `${state.currentPlayer === "w" ? "White" : "Black"} to move${checkNote}`;
+		const aiNote = isAiTurn() ? (state.aiThinking ? " — Computer thinking..." : " — Computer to move") : "";
+		statusEl.textContent = `${state.currentPlayer === "w" ? "White" : "Black"} to move${checkNote}${aiNote}`;
 	}
 
 	// Squares
@@ -172,13 +187,18 @@ function renderAll() {
 			const [mr, mc] = fromVisualToModel(r, c);
 			const piece = state.board[mr][mc];
 
-			sqEl.textContent = piece ? UNICODE_PIECE[piece.color][piece.type] : "";
+			// Render piece inside a colored badge element for clearer team distinction
+			sqEl.textContent = "";
 			if (piece) {
 				sqEl.setAttribute("data-color", piece.color);
+				const badge = document.createElement("div");
+				badge.className = `piece piece-${piece.color}`;
+				badge.textContent = UNICODE_PIECE[piece.color][piece.type];
+				sqEl.appendChild(badge);
 			} else {
 				sqEl.removeAttribute("data-color");
 			}
-			sqEl.classList.toggle("selectable", !!piece && piece.color === state.currentPlayer && !state.gameOver);
+			sqEl.classList.toggle("selectable", !!piece && piece.color === state.currentPlayer && !state.gameOver && !isAiTurn() && !state.aiThinking);
 
 			sqEl.classList.remove("highlight-move", "highlight-capture", "king-in-check");
 			if (state.selected) {
@@ -437,5 +457,59 @@ function fromVisualToModel(vr, vc) {
 
 function fromModelToVisual(mr, mc) {
 	return state.flip ? [7 - mr, 7 - mc] : [mr, mc];
+}
+
+// --- Simple AI integration ---
+function isAiTurn() {
+	return state.computerSide !== "off" && state.currentPlayer === state.computerSide;
+}
+
+function queueAiIfNeeded() {
+	if (state.gameOver) return;
+	if (!isAiTurn()) return;
+	state.aiThinking = true;
+	renderAll();
+	setTimeout(runAiTurn, 200); // small delay for UX
+}
+
+function runAiTurn() {
+	if (!isAiTurn() || state.gameOver) {
+		state.aiThinking = false;
+		renderAll();
+		return;
+	}
+	const move = pickGreedyMove(state.currentPlayer, state.board);
+	state.aiThinking = false;
+	if (!move) {
+		// no moves, afterMoveUpdate handles game over when user moved last; still switch
+		afterMoveUpdate();
+		renderAll();
+		return;
+	}
+	applyMove(move.from.row, move.from.col, move.to.row, move.to.col);
+	afterMoveUpdate();
+	renderAll();
+}
+
+// 1-ply greedy: prefer captures by value; tiebreak by random
+const PIECE_VALUE = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
+
+function pickGreedyMove(color, board) {
+	let best = null;
+	for (let r = 0; r < 8; r += 1) {
+		for (let c = 0; c < 8; c += 1) {
+			const p = board[r][c];
+			if (!p || p.color !== color) continue;
+			const moves = generateLegalMoves(r, c, board, color);
+			for (const m of moves) {
+				const target = board[m.row][m.col];
+				const score = target ? PIECE_VALUE[target.type] : 0;
+				if (!best || score > best.score || (score === best.score && Math.random() < 0.5)) {
+					best = { score, from: { row: r, col: c }, to: { row: m.row, col: m.col } };
+				}
+			}
+		}
+	}
+	return best;
 }
 
